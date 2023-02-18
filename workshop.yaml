@@ -3,6 +3,9 @@
     Type: 'AWS::EC2::VPC'
     Properties:
       CidrBlock: '10.0.0.0/16'
+      Tags:
+       - Key: Name
+         Value: Workshop_VPC
 
   InternetGateway:
     Type: 'AWS::EC2::InternetGateway'
@@ -32,6 +35,9 @@
       VpcId: !Ref VPC
       CidrBlock: '10.0.1.0/24'
       MapPublicIpOnLaunch: true
+      Tags:
+       - Key: Name
+         Value: Workshop_Public_Subnet
 
   SubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
@@ -39,20 +45,26 @@
       SubnetId: !Ref Subnet
       RouteTableId: !Ref PublicRouteTable
 
+  ImportedKeyPair:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: RAGKeyPair
+      PublicKeyMaterial: ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDytObxiQ8jyjBDbE9zZmA8675fZquFd0sNqFzNRtNTegFLbBJGD8g9KDKMTmxI/a/RxM367T3CwA61yukl6EEKJihCzXScpRRAP0vwLcDXYmTXf7nP6kixuzT0DX0gIjZVx1G2xi3carAxnmG5RGHbCEk0/0VBTE00U2n7OWeB7uhww66IxytnvZuVpP9plUHOi3ljE5IQtAWIN0PTpW0pWvnIMtGWTzgntovNBgaa1StcJW11o+CgHe4rLaC/kSOb6N/qhLXiwMr0RrxCzkChTJqs+M3KEseLFm2CUQBfdb0zV1YTAiK1reaau1xTJGCOLVdaOn9PE9e3vlWU/7gMstmkYd+aeCeLztmjJKOn018tsDAoJ9uNsQeEbEpJU4wNBeCMcQFNoVTAbO4umRbiffPy92CCKHL6HB2gzKCmRIycpmhkc1qWG3LLJsGdNrSFpCCLhQ+8ruYqMK12Ha7JMRO5mYvwxhUk+DbqbiI0wiL7y/tpGje6pmZWa3FhwFWQ4TbCk4Cf2N3cjMODLMNRK/UWlWzgF3g20LJxm3VlyDnPqAcz11wiX5k5avMo8+uVJkI1MAG1Wl9t+XVSH0iK4Ozith4kqm65CsaPG5u0A5JWlCf3+kXRMhqnDc4c6/0Te7+MngKy/62HQssI5ZZcvueOp9DTdhCOIjwgQiEy8w==
+
 #  LoadBalancer:
-#    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+#    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
 #    Properties:
 #      Name: 'my-load-balancer'
 #      Scheme: internet-facing
 #      Type: application
 #      IpAddressType: ipv4
 #      SecurityGroups:
-#        - !Ref LoadBalancerSecurityGroup
+#       - !Ref LoadBalancerSecurityGroup
 #      Subnets:
 #        - !Ref Subnet
 
   LoadBalancerSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
+    Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: 'Enable HTTP access'
       SecurityGroupIngress:
