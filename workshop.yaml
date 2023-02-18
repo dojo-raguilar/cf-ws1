@@ -29,21 +29,42 @@
       GatewayId: !Ref InternetGateway
       RouteTableId: !Ref PublicRouteTable
 
-  Subnet:
+  Subneta:
     Type: 'AWS::EC2::Subnet'
     Properties:
       VpcId: !Ref VPC
       CidrBlock: '10.0.1.0/24'
       MapPublicIpOnLaunch: true
+      AvailabilityZone: "us-east-1a"
       Tags:
        - Key: Name
-         Value: Workshop_Public_Subnet
+         Value: Workshop_Public_Subnet_a
+
+  Subnetb:
+    Type: 'AWS::EC2::Subnet'
+    Properties:
+      VpcId: !Ref VPC
+      CidrBlock: '10.0.2.0/24'
+      MapPublicIpOnLaunch: true
+      AvailabilityZone: "us-east-1b"
+      Tags:
+       - Key: Name
+         Value: Workshop_Public_Subnet_b
 
   SubnetRouteTableAssociation:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
-      SubnetId: !Ref Subnet
+      SubnetId: 
+        Ref: Subneta
+        Ref: Subnetb
       RouteTableId: !Ref PublicRouteTable
+
+#  SubnetRouteTableAssociationb:
+#    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+#    Properties:
+#     SubnetId: 
+#        !Ref Subnetb
+#      RouteTableId: !Ref PublicRouteTable
 
   ImportedKeyPair:
     Type: AWS::EC2::KeyPair
@@ -141,14 +162,14 @@
           ToPort: 80
           CidrIp: '0.0.0.0/0'
 
-  TargetGroup:
-    Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
-    Properties:
-      Name: 'my-target-group'
-      Port: 80
-      Protocol: HTTP
-      TargetType: ip
-      VpcId: !Ref VPC
+  #TargetGroup:
+  #  Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+  #  Properties:
+  #    Name: 'my-target-group'
+  #    Port: 80
+  #    Protocol: HTTP
+  #    TargetType: ip
+  #    VpcId: !Ref VPC
 
   S3Role:
     Type: 'AWS::IAM::Role'
