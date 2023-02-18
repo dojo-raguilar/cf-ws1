@@ -39,17 +39,17 @@
       SubnetId: !Ref Subnet
       RouteTableId: !Ref PublicRouteTable
 
-  LoadBalancer:
-    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
-    Properties:
-      Name: 'my-load-balancer'
-      Scheme: internet-facing
-      Type: application
-      IpAddressType: ipv4
-      SecurityGroups:
-        - !Ref LoadBalancerSecurityGroup
-      Subnets:
-        - !Ref Subnet
+#  LoadBalancer:
+#    Type: 'AWS::ElasticLoadBalancingV2::LoadBalancer'
+#    Properties:
+#      Name: 'my-load-balancer'
+#      Scheme: internet-facing
+#      Type: application
+#      IpAddressType: ipv4
+#      SecurityGroups:
+#        - !Ref LoadBalancerSecurityGroup
+#      Subnets:
+#        - !Ref Subnet
 
   LoadBalancerSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -61,59 +61,59 @@
           ToPort: 80
           CidrIp: '0.0.0.0/0'
 
-  AutoScalingGroup:
-    Type: 'AWS::AutoScaling::AutoScalingGroup'
-    Properties:
-      AutoScalingGroupName: 'my-auto-scaling-group'
-      VPCZoneIdentifier: !Ref Subnet
-      LaunchConfigurationName: !Ref AutoScalingLaunchConfiguration
-      MinSize: 1
-      MaxSize: 3
-      TargetGroupARNs:
-        - !Ref TargetGroup
-      HealthCheckGracePeriod: 300
-      Cooldown: 300
-      Tags:
-        - Key: Name
-          Value: 'my-auto-scaling-group'
-          PropagateAtLaunch: true
-      MetricsCollection:
-        - Granularity: '1Minute'
-          Metrics:
-            - GroupMinSize
-            - GroupMaxSize
-            - GroupDesiredCapacity
-            - GroupInServiceInstances
-            - GroupPendingInstances
-            - GroupStandbyInstances
-            - GroupTerminatingInstances
-            - GroupTotalInstances
-      NotificationConfigurations:
-        - TopicARN: !Ref SNSNotificationTopic
-          NotificationTypes:
-            - 'autoscaling:EC2_INSTANCE_LAUNCH'
-            - 'autoscaling:EC2_INSTANCE_TERMINATE'
+#  AutoScalingGroup:
+#    Type: 'AWS::AutoScaling::AutoScalingGroup'
+#    Properties:
+#      AutoScalingGroupName: 'my-auto-scaling-group'
+#      VPCZoneIdentifier: !Ref Subnet
+#      LaunchConfigurationName: !Ref AutoScalingLaunchConfiguration
+#      MinSize: 1
+#      MaxSize: 3
+#      TargetGroupARNs:
+#        - !Ref TargetGroup
+#      HealthCheckGracePeriod: 300
+#      Cooldown: 300
+#      Tags:
+#        - Key: Name
+#          Value: 'my-auto-scaling-group'
+#          PropagateAtLaunch: true
+#      MetricsCollection:
+#        - Granularity: '1Minute'
+#          Metrics:
+#            - GroupMinSize
+#            - GroupMaxSize
+#            - GroupDesiredCapacity
+#            - GroupInServiceInstances
+#            - GroupPendingInstances
+#            - GroupStandbyInstances
+#            - GroupTerminatingInstances
+#            - GroupTotalInstances
+#      NotificationConfigurations:
+#        - TopicARN: !Ref SNSNotificationTopic
+#          NotificationTypes:
+#            - 'autoscaling:EC2_INSTANCE_LAUNCH'
+#            - 'autoscaling:EC2_INSTANCE_TERMINATE'
 
-  AutoScalingLaunchConfiguration:
-    Type: 'AWS::AutoScaling::LaunchConfiguration'
-    Properties:
-      LaunchConfigurationName: 'my-launch-configuration'
-      ImageId: ami-0c94855ba95c71c99
-      KeyName: !Ref KeyPairName
-      UserData:
-        Fn::Base64: !Sub |
-          #!/bin/bash
-          echo '<?php phpinfo(); ?>' > /var/www/html/index.php
-      SecurityGroups:
-        - !Ref LaunchConfigurationSecurityGroup
-      InstanceType: t2.micro
-      IamInstanceProfile: !Ref InstanceProfile
-      BlockDeviceMappings:
-        - DeviceName: /dev/xvdf
-          Ebs:
-            VolumeSize: '10'
-            VolumeType: gp2
-      AssociatePublicIpAddress: true
+#  AutoScalingLaunchConfiguration:
+#    Type: 'AWS::AutoScaling::LaunchConfiguration'
+#    Properties:
+#      LaunchConfigurationName: 'my-launch-configuration'
+#      ImageId: ami-0c94855ba95c71c99
+#      KeyName: !Ref KeyPairName
+#      UserData:
+#        Fn::Base64: !Sub |
+#          #!/bin/bash
+#          echo '<?php phpinfo(); ?>' > /var/www/html/index.php
+#      SecurityGroups:
+#        - !Ref LaunchConfigurationSecurityGroup
+#      InstanceType: t2.micro
+#      IamInstanceProfile: !Ref InstanceProfile
+#      BlockDeviceMappings:
+#        - DeviceName: /dev/xvdf
+#          Ebs:
+#            VolumeSize: '10'
+#            VolumeType: gp2
+#      AssociatePublicIpAddress: true
 
   LaunchConfigurationSecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
@@ -179,27 +179,27 @@
       PerformanceMode: generalPurpose
       Encrypted: true
 
-  EfsMountTarget:
-    Type: 'AWS::EFS::MountTarget'
-    Properties:
-      FileSystemId: !Ref EfsFileSystem
-      SubnetId: !Ref Subnet
-      SecurityGroups:
-        - !Ref EfsMountTargetSecurityGroup
+#  EfsMountTarget:
+#    Type: 'AWS::EFS::MountTarget'
+#    Properties:
+#      FileSystemId: !Ref EfsFileSystem
+#      SubnetId: !Ref Subnet
+#      SecurityGroups:
+#        - !Ref EfsMountTargetSecurityGroup
 
-  EfsMountTargetSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: 'Enable NFS access to EFS'
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 2049
-          ToPort: 2049
-          SourceSecurityGroupId: !Ref LaunchConfigurationSecurityGroup
+#  EfsMountTargetSecurityGroup:
+#    Type: 'AWS::EC2::SecurityGroup'
+#    Properties:
+#      GroupDescription: 'Enable NFS access to EFS'
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: 2049
+#          ToPort: 2049
+#          SourceSecurityGroupId: !Ref LaunchConfigurationSecurityGroup
 
-Outputs:
-  LoadBalancerDNSName:
-    Value: !GetAtt LoadBalancer.DNSName
-
-  AutoScalingGroupName:
-    Value: !Ref AutoScalingGroup
+#Outputs:
+#  LoadBalancerDNSName:
+#    Value: !GetAtt LoadBalancer.DNSName
+#
+#  AutoScalingGroupName:
+#    Value: !Ref AutoScalingGroup
