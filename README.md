@@ -1,4 +1,4 @@
-# cf-ws1 - Cloud Formation - Workshop 1
+# Cloud Formation - Workshop 1
 
 ## Actividad: Despliegue de una aplicación web escalable en AWS
 
