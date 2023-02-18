@@ -51,11 +51,18 @@
        - Key: Name
          Value: Workshop_Public_Subnet_b
 
-  SubnetRouteTableAssociation:
+  SubnetRouteTableAssociation1:
     Type: 'AWS::EC2::SubnetRouteTableAssociation'
     Properties:
       SubnetId: 
         Ref: Subneta
+      RouteTableId: 
+        Ref: PublicRouteTable
+  
+  SubnetRouteTableAssociation2:
+    Type: 'AWS::EC2::SubnetRouteTableAssociation'
+    Properties:
+      SubnetId: 
         Ref: Subnetb
       RouteTableId: 
         Ref: PublicRouteTable
@@ -85,15 +92,15 @@
 #      Subnets:
 #        - !Ref Subnet
 
-  LoadBalancerSecurityGroup:
-    Type: AWS::EC2::SecurityGroup
-    Properties:
-      GroupDescription: 'Enable HTTP access'
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: '0.0.0.0/0'
+ # LoadBalancerSecurityGroup:
+ #   Type: AWS::EC2::SecurityGroup
+ #   Properties:
+ #     GroupDescription: 'Enable HTTP access'
+ #     SecurityGroupIngress:
+ #       - IpProtocol: tcp
+ #         FromPort: 80
+ #         ToPort: 80
+ #         CidrIp: '0.0.0.0/0'
 
 #  AutoScalingGroup:
 #    Type: 'AWS::AutoScaling::AutoScalingGroup'
@@ -149,28 +156,28 @@
 #            VolumeType: gp2
 #      AssociatePublicIpAddress: true
 
-  LaunchConfigurationSecurityGroup:
-    Type: 'AWS::EC2::SecurityGroup'
-    Properties:
-      GroupDescription: 'Enable HTTP and SSH access'
-      SecurityGroupIngress:
-        - IpProtocol: tcp
-          FromPort: 22
-          ToPort: 22
-          CidrIp: '0.0.0.0/0'
-        - IpProtocol: tcp
-          FromPort: 80
-          ToPort: 80
-          CidrIp: '0.0.0.0/0'
+# LaunchConfigurationSecurityGroup:
+#    Type: 'AWS::EC2::SecurityGroup'
+#    Properties:
+#      GroupDescription: 'Enable HTTP and SSH access'
+#      SecurityGroupIngress:
+#        - IpProtocol: tcp
+#          FromPort: 22
+#          ToPort: 22
+#          CidrIp: '0.0.0.0/0'
+#        - IpProtocol: tcp
+#          FromPort: 80
+#          ToPort: 80
+#          CidrIp: '0.0.0.0/0'
 
-  #TargetGroup:
-  #  Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
-  #  Properties:
-  #    Name: 'my-target-group'
-  #    Port: 80
-  #    Protocol: HTTP
-  #    TargetType: ip
-  #    VpcId: !Ref VPC
+#TargetGroup:
+#  Type: 'AWS::ElasticLoadBalancingV2::TargetGroup'
+#  Properties:
+#    Name: 'my-target-group'
+#    Port: 80
+#    Protocol: HTTP
+#    TargetType: ip
+#    VpcId: !Ref VPC
 
   S3Role:
     Type: 'AWS::IAM::Role'
