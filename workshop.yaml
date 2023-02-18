@@ -57,7 +57,8 @@
       SubnetId: 
         Ref: Subneta
         Ref: Subnetb
-      RouteTableId: !Ref PublicRouteTable
+      RouteTableId: 
+        Ref: PublicRouteTable
 
 #  SubnetRouteTableAssociationb:
 #    Type: 'AWS::EC2::SubnetRouteTableAssociation'
